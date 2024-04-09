@@ -22,11 +22,12 @@ class MyApp extends StatelessWidget {
           // or simply save your changes to "hot reload" in a Flutter IDE).
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
+          fontFamily: 'OpenSans',
           colorScheme: ColorScheme.fromSwatch().copyWith(
-        background: const Color(0xfff2f2f2),
-        primary: const Color(0xFF343A40),
-        // secondary: const Color(0xFFFFC107),
-      )),
+            background: const Color(0xfff2f2f2),
+            primary: const Color(0xaaaa7d29),
+            // secondary: const Color(0xFFFFC107),
+          )),
       home: MyHomePage(),
     );
   }
@@ -35,14 +36,38 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('testing'),
-        flexibleSpace: Image(
-          image: AssetImage('assets/images/banner-hermes.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
+          toolbarHeight: width * 0.475,
+          flexibleSpace: Stack(children: <Widget>[
+            Image(
+              image: AssetImage('assets/images/banner-hermes.png'),
+              fit: BoxFit.cover,
+            ),
+            Container(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Image(
+                        image: AssetImage('assets/images/user.png'),
+                        width: 55,
+                        height: 55),
+                    Text(
+                      "Hi User!",
+                      style: TextStyle(
+                          fontSize: 32,
+                          fontFamily: 'OpenSans',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ))
+          ])),
       body: Container(),
     );
   }
