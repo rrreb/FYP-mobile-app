@@ -37,39 +37,106 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    final Color primaryColor = Color(0xaaaa7d29);
 
     return Scaffold(
-      appBar: AppBar(
-          toolbarHeight: width * 0.475,
-          flexibleSpace: Stack(children: <Widget>[
-            Image(
-              image: AssetImage('assets/images/banner-hermes.png'),
-              fit: BoxFit.cover,
-            ),
-            Container(
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Image(
-                        image: AssetImage('assets/images/user.png'),
-                        width: 55,
-                        height: 55),
-                    Text(
-                      "Hi User!",
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontFamily: 'OpenSans',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+        appBar: AppBar(
+            toolbarHeight: width * 0.475,
+            flexibleSpace: Stack(children: <Widget>[
+              Image(
+                image: AssetImage('assets/images/banner-hermes.png'),
+                fit: BoxFit.cover,
+              ),
+              Container(
+                  alignment: Alignment.centerRight,
+                  margin: EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Image(
+                          image: AssetImage('assets/images/user.png'),
+                          width: 55,
+                          height: 55),
+                      Text(
+                        "Hi User!",
+                        style: TextStyle(
+                            fontSize: 32,
+                            fontFamily: 'OpenSans',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ))
+            ])),
+        body: ListView(
+          children: <Widget>[
+            Stack(
+              alignment: Alignment.topLeft,
+              children: <Widget>[
+                Positioned.fill(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 42, bottom: 86),
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 24, horizontal: 30),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Free AI\nAuthentication',
+                            style: TextStyle(
+                                fontSize: 32, fontWeight: FontWeight.bold)),
+                        Text('Learn more',
+                            style: TextStyle(
+                                fontSize: 10,
+                                decoration: TextDecoration.underline)),
+                        SizedBox(height: 22),
+                        OutlinedButton(
+                          child: Text("Upload", style: TextStyle(fontSize: 20)),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size.fromHeight(44),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            side: BorderSide(
+                              color: primaryColor,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              '15',
+                              style: TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor),
+                            ),
+                            SizedBox(width: 15),
+                            Text(
+                              'APPRAISAL\nCOUNT',
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 24),
+                        Divider(
+                          color: Colors.black,
+                        )
+                      ],
                     ),
-                  ],
-                ))
-          ])),
-      body: Container(),
-    );
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
   }
 }
 
