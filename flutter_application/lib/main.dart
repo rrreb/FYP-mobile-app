@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'camera.dart';
 
 void main() {
   runApp(const MyApp());
@@ -107,7 +108,13 @@ class MyHomePage extends StatelessWidget {
                               color: primaryColor,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TakePhotoPage()),
+                            );
+                          },
                         ),
                         SizedBox(height: 20),
                         Row(
