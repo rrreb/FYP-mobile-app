@@ -33,11 +33,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
+final Color primaryColor = Color(0xaaaa7d29);
+
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    final Color primaryColor = Color(0xaaaa7d29);
+    // final Color primaryColor = Color(0xaaaa7d29);
 
     return Scaffold(
         appBar: AppBar(
@@ -125,18 +127,108 @@ class MyHomePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 24),
-                        Divider(
-                          color: Colors.black,
-                        )
                       ],
                     ),
                   ),
                 ),
               ],
             ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(
+                color: Colors.black,
+                thickness: 1,
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 21),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Recent Appraisal List',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      Text(
+                        'See all',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline, fontSize: 10),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 14),
+                  AppraisalItem(
+                      name: 'Hermes Birkin', rate: 79, date: '1 November 2023'),
+                  AppraisalItem(
+                      name: 'Hermes Birkin', rate: 79, date: '1 November 2023'),
+                  AppraisalItem(
+                      name: 'Hermes Birkin', rate: 79, date: '1 November 2023'),
+                ],
+              ),
+            ),
           ],
         ));
+  }
+}
+
+class AppraisalItem extends StatelessWidget {
+  final String name;
+  final int rate;
+  final String date;
+
+  const AppraisalItem({
+    Key? key,
+    required this.name,
+    required this.rate,
+    required this.date,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(bottom: 10),
+        child: Row(children: <Widget>[
+          Image(
+            image: AssetImage('assets/images/temp-bag.png'),
+            height: 88,
+          ),
+          SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  name,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: primaryColor),
+                ),
+                Text(
+                  rate.toString() + '%',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      fontSize: 24,
+                      color: Colors.grey),
+                ),
+                Text(
+                  date,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      fontSize: 10,
+                      color: Colors.grey),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 15),
+        ]));
   }
 }
 
