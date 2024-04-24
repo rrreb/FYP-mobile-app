@@ -87,6 +87,38 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
   }
 
+  Future<XFile?> capturePhoto() async {
+    final CameraController? cameraController = _controller;
+    if (cameraController!.value.isTakingPicture) {
+      // A capture is already pending, do nothing.
+      return null;
+    }
+    try {
+      await cameraController.setFlashMode(FlashMode.off); //optional
+      XFile file = await cameraController.takePicture();
+      return file;
+    } on CameraException catch (e) {
+      debugPrint('Error occured while taking picture: $e');
+      return null;
+    }
+  }
+
+  void _onTakePhotoPressed() async {
+    final navigator = Navigator.of(context);
+    final xFile = await capturePhoto();
+    if (xFile != null) {
+      if (xFile.path.isNotEmpty) {
+        // navigator.push(
+        //   MaterialPageRoute(
+        //     builder: (context) => PreviewPage(
+        //       imagePath: xFile.path,
+        //     ),
+        //   ),
+        // );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isCameraInitialized) {
@@ -94,6 +126,18 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         child: Scaffold(
           body: Column(children: [
             CameraPreview(_controller!),
+            ElevatedButton(
+              onPressed: _onTakePhotoPressed,
+              style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(70, 70),
+                  shape: const CircleBorder(),
+                  backgroundColor: Colors.white),
+              child: const Icon(
+              Icons.camera_alt,
+              color: Colors.black,
+              size: 30,
+            ),
+            ),
           ]),
         ),
       );
