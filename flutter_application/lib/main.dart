@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'camera.dart';
+import 'package:card_swiper/card_swiper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -112,7 +113,7 @@ class MyHomePage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TakePhotoPage()),
+                                  builder: (context) => CameraPage()),
                             );
                           },
                         ),
