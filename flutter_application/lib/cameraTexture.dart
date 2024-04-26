@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter_application/result.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -210,7 +211,13 @@ class CameraPageState extends State<CameraTexturePage> with WidgetsBindingObserv
                   Expanded(
                     flex: 1,
                     child: ElevatedButton(
-                      onPressed: capturePhoto,
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResultPage()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         // fixedSize: const Size(70, 70),
                           shape: const CircleBorder(),
