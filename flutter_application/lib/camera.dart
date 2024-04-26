@@ -24,6 +24,9 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   features feature = features.LOGO;
   List<bool> hasPhoto = [false, false];
 
+  XFile? xFileLogo;
+  XFile? xFileTexture;
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +45,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     // Instantiating the camera controller
     final CameraController cameraController = CameraController(
       description,
-      ResolutionPreset.high,
+      ResolutionPreset.medium,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
 
@@ -63,10 +66,10 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     await previousCameraController?.dispose();
 
     // Update UI if controller updated
-    cameraController.addListener(() {
-      // if (mounted) setState(() {});
-      setState(() {});
-    });
+    // cameraController.addListener(() {
+    //   // if (mounted) setState(() {});
+    //   setState(() {});
+    // });
   }
 
   @override
@@ -100,8 +103,15 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     //   return null;
     // }
     try {
-      await cameraController!.setFlashMode(FlashMode.off); //optional
-      XFile file = await cameraController.takePicture();
+      XFile file;
+      setState(() async {
+        await cameraController!.setFlashMode(FlashMode.off); //optional
+        file = await cameraController.takePicture();
+        feature == features.LOGO
+          ? xFileLogo = file
+          : xFileTexture = file;
+        // return file;
+      });
       // return file;
       return null;
     } on CameraException catch (e) {
@@ -111,21 +121,21 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   }
 
 
-  void _onTakePhotoPressed() async {
-    final navigator = Navigator.of(context);
-    final xFile = await capturePhoto();
-    if (xFile != null) {
-      if (xFile.path.isNotEmpty) {
-        // navigator.push(
-        //   MaterialPageRoute(
-        //     builder: (context) => PreviewPage(
-        //       imagePath: xFile.path,
-        //     ),
-        //   ),
-        // );
-      }
-    }
-  }
+  // void _onTakePhotoPressed() async {
+  //   final navigator = Navigator.of(context);
+  //   xFile = await capturePhoto();
+  //   if (xFile != null) {
+  //     if (xFile!.path.isNotEmpty) {
+  //       // navigator.push(
+  //       //   MaterialPageRoute(
+  //       //     builder: (context) => PreviewPage(
+  //       //       imagePath: xFile.path,
+  //       //     ),
+  //       //   ),
+  //       // );
+  //     }
+  //   }
+  // }
 
 
 
@@ -143,73 +153,75 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         child: Scaffold(
           appBar: AppBar(
               title: feature == features.LOGO
-                      ? Text('Logo')
-                      : Text('Texture'),
+                      ? Text('Logo', style: TextStyle(color: Color(0xaaaa7d29), fontWeight: FontWeight.bold))
+                      : Text('Texture',style: TextStyle(color: Color(0xaaaa7d29), fontWeight: FontWeight.bold)),
+            backgroundColor: Color(0xFF282828),
+            foregroundColor: Colors.white,
           ),
-          body: Column(children: [
-            if (feature == features.LOGO)
-              Expanded(
-                child:Container(
-                  width: size.width,
-                  //   height: 700,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Container(
-                        width: size.width,
-                        height: size.width * _controller!.value.aspectRatio,
-                        child: Transform.rotate(
-                          angle: -90 * 3.1415926535897932 / 180,
-                          child: CameraPreview(_controller!),
-                        ), // this is my CameraPreview
+          body: Container(
+            color: Color(0xFF282828),
+            child: Column(children: [
+              if (feature == features.LOGO)
+                Expanded(
+                  child: Container(
+                    width: size.width,
+                    //   height: 700,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Container(
+                          width: size.width,
+                          height: size.width * _controller!.value.aspectRatio,
+                          child: Transform.rotate(
+                            angle: -90 * 3.1415926535897932 / 180,
+                            child:  CameraPreview(_controller!),
+                          ), // this is my CameraPreview
+                        ),
                       ),
-                    ),
+                  ),
+                )
+              else
+               Text('testing'),
+              Text((feature == features.LOGO)? "Place the logo inside the box" : '', style: TextStyle(color: Colors.white),),
+              Container(
+                child: Swiper(
+                  loop: false,
+                  itemCount: featuresList.length,
+                  itemWidth: MediaQuery.of(context).size.width/5,
+                  viewportFraction: 1,
+                  scale: 0.5,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      child: Center(
+                        child: Text(
+                          featuresList[index],
+                          style: TextStyle(fontSize: 30.0, color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
+                  onIndexChanged: (int index) {
+                    setState(() {
+                      feature = features.values[index];
+                    });
+                  },
+              ),
+                height: 54,
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: capturePhoto,
+                style: ElevatedButton.styleFrom(
+                    // fixedSize: const Size(70, 70),
+                    shape: const CircleBorder(),
+                    backgroundColor: Colors.white),
+                child: const Icon(
+                  Icons.panorama_fish_eye,
+                  color: Color(0xFF282828),
+                  size: 56,
                 ),
-              )
-            else
-             Text('testing'),
-            Text((feature == features.LOGO)? "Place the logo inside the box" : ''),
-            Container(
-              child: Swiper(
-                loop: false,
-                itemCount: featuresList.length,
-                itemWidth: MediaQuery.of(context).size.width/5,
-                viewportFraction: 1,
-                scale: 0.5,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        featuresList[index],
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    ),
-                  );
-                },
-                onIndexChanged: (int index) {
-                  setState(() {
-                    feature = features.values[index];
-                  });
-                },
-            ),
-              height: 54,
-            ),
-            ElevatedButton(
-              onPressed: _onTakePhotoPressed,
-              style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(70, 70),
-                  shape: const CircleBorder(),
-                  backgroundColor: Colors.white),
-              child: const Icon(
-              Icons.camera_alt,
-              color: Colors.black,
-              size: 30,
-            ),
-            ),
-          ]),
+              ),
+            ]),
+        ),
         ),
       );
     } else {
