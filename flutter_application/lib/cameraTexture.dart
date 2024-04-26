@@ -6,10 +6,10 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 
-import 'cameraTexture.dart';
+import 'camera.dart';
 
-class CameraPage extends StatefulWidget {
-  const CameraPage({super.key});
+class CameraTexturePage extends StatefulWidget {
+  const CameraTexturePage({super.key});
 
   @override
   CameraPageState createState() => CameraPageState();
@@ -17,13 +17,12 @@ class CameraPage extends StatefulWidget {
 
 enum features {LOGO, TEXTURE}
 
-class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
+class CameraPageState extends State<CameraTexturePage> with WidgetsBindingObserver {
   CameraController? _controller;
   bool _isCameraInitialized = false;
   late final List<CameraDescription> _cameras;
-  bool _isRecording = false;
 
-  features feature = features.LOGO;
+  features feature = features.TEXTURE;
   List<bool> hasPhoto = [false, false];
 
   XFile? xFileLogo;
@@ -121,29 +120,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       return null;
     }
   }
-
-
-  // void _onTakePhotoPressed() async {
-  //   final navigator = Navigator.of(context);
-  //   xFile = await capturePhoto();
-  //   if (xFile != null) {
-  //     if (xFile!.path.isNotEmpty) {
-  //       // navigator.push(
-  //       //   MaterialPageRoute(
-  //       //     builder: (context) => PreviewPage(
-  //       //       imagePath: xFile.path,
-  //       //     ),
-  //       //   ),
-  //       // );
-  //     }
-  //   }
-  // }
-
-
-
   List<String> featuresList = ['Logo', 'Texture'];
 
-  late final logoImage;
 
   @override
   Widget build(BuildContext context) {
@@ -154,16 +132,13 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-              title: feature == features.LOGO
-                  ? Text('Logo', style: TextStyle(color: Color(0xaaaa7d29), fontWeight: FontWeight.bold))
-                  : Text('Texture',style: TextStyle(color: Color(0xaaaa7d29), fontWeight: FontWeight.bold)),
+              title: Text('Texture',style: TextStyle(color: Color(0xaaaa7d29), fontWeight: FontWeight.bold)),
             backgroundColor: Color(0xFF282828),
             foregroundColor: Colors.white,
           ),
           body: Container(
             color: Color(0xFF282828),
             child: Column(children: [
-              if (feature == features.LOGO)
                 Expanded(
                   child: Container(
                     width: size.width,
@@ -180,9 +155,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         ),
                       ),
                   ),
-                )
-              else
-               Text('testing'),
+                ),
               Text((feature == features.LOGO)? "Place the logo inside the box" : '', style: TextStyle(color: Colors.white),),
               Container(
                 child: Swiper(
@@ -191,6 +164,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   itemWidth: MediaQuery.of(context).size.width/5,
                   viewportFraction: 1,
                   scale: 0.5,
+                  index: 1,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       child: Center(
@@ -205,24 +179,50 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CameraTexturePage()),
+                          builder: (context) => CameraPage()),
                     );
                   },
               ),
                 height: 54,
               ),
               SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: capturePhoto,
-                style: ElevatedButton.styleFrom(
-                    // fixedSize: const Size(70, 70),
-                    shape: const CircleBorder(),
-                    backgroundColor: Colors.white),
-                child: const Icon(
-                  Icons.panorama_fish_eye,
-                  color: Color(0xFF282828),
-                  size: 56,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(), // Empty container as the first child
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: capturePhoto,
+                      style: ElevatedButton.styleFrom(
+                        // fixedSize: const Size(70, 70),
+                          shape: const CircleBorder(),
+                          backgroundColor: Colors.white),
+                      child: const Icon(
+                        Icons.panorama_fish_eye,
+                        color: Color(0xFF282828),
+                        size: 56,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: capturePhoto,
+                      style: ElevatedButton.styleFrom(
+                        // fixedSize: const Size(70, 70),
+                          shape: const CircleBorder(),
+                          backgroundColor: Color(0xFF282828)),
+                      child: const Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                        size: 56,
+                      ),
+                    ),
+                  ),
+                ]
               ),
             ]),
         ),
