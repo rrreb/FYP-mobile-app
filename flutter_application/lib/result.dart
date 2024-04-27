@@ -48,7 +48,15 @@ class ResultPageState extends State<ResultPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Confidence Score: 81%',
+                    'Confidence Score: 83%',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    'Logo: 76%',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    'Texture: 90%',
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 20),
